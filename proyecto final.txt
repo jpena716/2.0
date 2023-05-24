@@ -1,0 +1,81 @@
+import datetime
+
+class Vehiculo:
+    def __init__(self, placa, tipo, hora_ingreso):
+        self.placa = placa
+        self.tipo = tipo
+        self.hora_ingreso = hora_ingreso
+
+    def calcular_tiempo_permanencia(self):
+        hora_salida = datetime.datetime.now()
+        tiempo_permanencia = hora_salida - self.hora_ingreso
+        return tiempo_permanencia
+
+class Parqueadero:
+    def __init__(self):
+        self.vehiculos = []
+
+    def agregar_vehiculo(self, vehiculo):
+        self.vehiculos.append(vehiculo)
+
+    def eliminar_vehiculo(self, placa):
+        for vehiculo in self.vehiculos:
+            if vehiculo.placa == placa:
+                self.vehiculos.remove(vehiculo)
+                return True
+        return False
+
+    def mostrar_vehiculos(self):
+        for vehiculo in self.vehiculos:
+            tiempo_permanencia = vehiculo.calcular_tiempo_permanencia()
+            print(f"Placa: {vehiculo.placa} - Tipo: {vehiculo.tipo} - Tiempo de permanencia: {tiempo_permanencia}")
+
+def mostrar_menu():
+    print("=== Menú ===")
+    print("1. Ingresar vehículo")
+    print("2. Eliminar vehículo")
+    print("3. Editar vehículo")
+    print("4. Mostrar vehículos")
+    print("5. Salir")
+
+parqueadero = Parqueadero()
+
+while True:
+    mostrar_menu()
+    opcion = input("Ingrese una opción: ")
+
+    if opcion == "1":
+        placa = input("Ingrese la placa del vehículo: ")
+        tipo = input("Ingrese el tipo de vehículo (carro o moto): ")
+        hora_ingreso = datetime.datetime.now()
+        vehiculo = Vehiculo(placa, tipo, hora_ingreso)
+        parqueadero.agregar_vehiculo(vehiculo)
+        print("Vehículo ingresado exitosamente.")
+
+    elif opcion == "2":
+        placa = input("Ingrese la placa del vehículo a eliminar: ")
+        if parqueadero.eliminar_vehiculo(placa):
+            print("Vehículo eliminado exitosamente.")
+        else:
+            print("No se encontró ningún vehículo")
+
+    elif opcion == "3":
+        placa = input("Ingrese la placa del vehículo a editar: ")
+        for vehiculo in parqueadero.vehiculos:
+            if vehiculo.placa == placa:
+                tipo = input("Ingrese el nuevo tipo de vehículo (carro o moto): ")
+                vehiculo.tipo = tipo
+                print("Vehículo editado exitosamente.")
+                break
+        else:
+            print("No se encontró")
+
+    elif opcion == "4":
+        parqueadero.mostrar_vehiculos()
+
+    elif opcion == "5":
+        print("Gracias por usar Parking 2.0 ")
+        break
+
+    else:
+        print("ehh ??")
